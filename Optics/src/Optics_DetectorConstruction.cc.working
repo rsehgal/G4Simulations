@@ -1,0 +1,223 @@
+#include "Optics_DetectorConstruction.hh"
+#include "G4Box.hh"
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4NistManager.hh"
+#include "Optics_SensitiveDetector.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
+
+#include "G4MaterialPropertiesTable.hh"
+#include "G4OpticalSurface.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4LogicalBorderSurface.hh"
+
+#include "G4VisAttributes.hh"
+Optics_DetectorConstruction::Optics_DetectorConstruction() {}
+
+Optics_DetectorConstruction::~Optics_DetectorConstruction() {}
+
+G4VPhysicalVolume* Optics_DetectorConstruction::ConstructNaIDetector() {
+    // --- Define materials ---
+    G4NistManager* nist = G4NistManager::Instance();
+
+    // Sodium Iodide (NaI) material
+    G4Material* NaI = nist->FindOrBuildMaterial("G4_SODIUM_IODIDE");
+    //G4Material* NaI = nist->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+
+    // Air material
+    G4Material* air = nist->FindOrBuildMaterial("G4_AIR");
+
+    // --- Define material properties for NaI ---
+    G4double photonEnergy[] = {2.00 * eV, 3.47 * eV};
+    const G4int nEntries = sizeof(photonEnergy) / sizeof(G4double);
+
+    G4double refractiveIndexNaI[] = {1.78, 1.78};
+    G4double absorptionLength[] = {2.0 * m, 2.0 * m};
+
+    G4MaterialPropertiesTable* NaIMPT = new G4MaterialPropertiesTable();
+    NaIMPT->AddProperty("RINDEX", photonEnergy, refractiveIndexNaI, nEntries);
+    NaIMPT->AddProperty("ABSLENGTH", photonEnergy, absorptionLength, nEntries);
+
+    NaI->SetMaterialPropertiesTable(NaIMPT);
+
+    // --- Define geometry ---
+    G4double crystalSize = 5 * cm;
+    G4Box* solidNaI = new G4Box("NaICrystal", crystalSize / 2, crystalSize / 2, crystalSize / 2);
+    G4LogicalVolume* logicNaI = new G4LogicalVolume(solidNaI, NaI, "NaILogic");
+
+    G4Box* solidWorld = new G4Box("World", 1 * m, 1 * m, 1 * m);
+    G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, air, "World");
+
+    G4VPhysicalVolume* physWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld, "World", nullptr, false, 0);
+
+    G4VPhysicalVolume *phyNai = new G4PVPlacement(0, G4ThreeVector(), logicNaI, "NaICrystal", logicWorld, false, 0);
+
+    // --- Define optical surface properties ---
+    G4OpticalSurface* crystalSurface = new G4OpticalSurface("NaISurface");
+    crystalSurface->SetType(dielectric_dielectric);
+    crystalSurface->SetFinish(polished);
+    crystalSurface->SetModel(unified);
+
+    new G4LogicalBorderSurface("NaIBorder", physWorld,phyNai , crystalSurface);
+
+    // --- Visualization attributes ---
+    G4VisAttributes* crystalVisAttr = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));  // Blue
+    crystalVisAttr->SetVisibility(true);
+    logicNaI->SetVisAttributes(crystalVisAttr);
+
+    return physWorld;
+}
+
+
+G4VPhysicalVolume *Optics_DetectorConstruction::Construct()
+{
+
+  //return ConstructNaIDetector();
+
+  G4NistManager *nist                 = G4NistManager::Instance();
+  G4Material *worldMat                = nist->FindOrBuildMaterial("G4_AIR");
+  G4MaterialPropertiesTable *worldMPT = new G4MaterialPropertiesTable();
+
+  G4Material *nai = nist->FindOrBuildMaterial("G4_SODIUM_IODIDE");
+
+  G4Box *solidWorld            = new G4Box("World", 0.5 * m, 0.5 * m, 0.5 * m);
+  G4LogicalVolume *logicWorld  = new G4LogicalVolume(solidWorld, worldMat, "World");
+  G4VPhysicalVolume *physWorld = new G4PVPlacement(nullptr, G4ThreeVector(), logicWorld, "World", nullptr, false, 0);
+
+  G4Tubs *crystal                 = new G4Tubs("NaI", 0, 1.27 * cm, 1.27 * cm, 0., 2 * M_PI);
+  G4LogicalVolume *logicalCrystal = new G4LogicalVolume(crystal, nai, "LogicalCrystal");
+  G4VPhysicalVolume *physCrystal =
+      new G4PVPlacement(nullptr, G4ThreeVector(), logicalCrystal, "PhysicalCrystal", logicWorld, false, 1);
+
+  // Trying to add optical properties,
+  // Change them based on the data sheet of your detector
+  G4MaterialPropertiesTable *NaIMPT = new G4MaterialPropertiesTable();
+  NaIMPT->AddConstProperty("SCINTILLATIONYIELD", 38.0 / keV); // Light yield
+  NaIMPT->AddConstProperty("RESOLUTIONSCALE", 1.0);           // Resolution
+  // NaIMPT->AddConstProperty("FASTTIMECONSTANT", 250.0 * ns);   // Decay time
+  // NaIMPT->AddConstProperty("YIELDRATIO", 1.0);                // 100% fast component
+
+  // Define refractive index and absorption length
+  const G4int nEntries                  = 2;
+  G4double photonEnergy[nEntries]       = {2.00 * eV, 3.47 * eV};
+  G4double refractiveIndex[nEntries]    = {1.78, 1.78};
+  G4double absorptionLength[nEntries]   = {2.0 * m, 2.0 * m};
+  G4double fastTimeConstant[nEntries]   = {250.0 * ns, 250.0 * ns};
+  G4double yieldRatioConstant[nEntries] = {1.0, 1.0};
+
+  G4double refractiveIndexAir[nEntries] = {1.00, 1.00};
+
+  NaIMPT->AddProperty("RINDEX", photonEnergy, refractiveIndex, nEntries);
+  NaIMPT->AddProperty("ABSLENGTH", photonEnergy, absorptionLength, nEntries);
+  NaIMPT->AddProperty("FASTTIMECONSTANT", photonEnergy, fastTimeConstant, nEntries, true);
+  NaIMPT->AddProperty("YIELDRATIO", photonEnergy, yieldRatioConstant, nEntries, true);
+  nai->SetMaterialPropertiesTable(NaIMPT);
+
+
+  G4MaterialPropertiesTable *Air_MPT = new G4MaterialPropertiesTable();
+  //Air_MPT->AddProperty("RINDEX", photonEnergy, refAir)->SetSpline(true);
+
+  worldMPT->AddProperty("RINDEX", photonEnergy, refractiveIndexAir, nEntries);
+  worldMat->SetMaterialPropertiesTable(worldMPT);
+
+
+//-------------------------------------------------------------
+/*
+  std::vector<G4double> reflectivity = {1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                                        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.};
+
+  std::vector<G4double> photonEnergy = {
+      2.034 * eV, 2.068 * eV, 2.103 * eV, 2.139 * eV, 2.177 * eV, 2.216 * eV, 2.256 * eV, 2.298 * eV,
+      2.341 * eV, 2.386 * eV, 2.433 * eV, 2.481 * eV, 2.532 * eV, 2.585 * eV, 2.640 * eV, 2.697 * eV,
+      2.757 * eV, 2.820 * eV, 2.885 * eV, 2.954 * eV, 3.026 * eV, 3.102 * eV, 3.181 * eV, 3.265 * eV,
+      3.353 * eV, 3.446 * eV, 3.545 * eV, 3.649 * eV, 3.760 * eV, 3.877 * eV, 4.002 * eV, 4.136 * eV};
+
+  std::vector<G4double> refractiveIndex1 = {1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58,
+                                            1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58,
+                                            1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58};
+
+  std::vector<G4double> refAir = {1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+                                  1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.};
+  std::vector<G4double> absorption = {3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m,
+                                      3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m,
+				      3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m,
+				      3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m, 3.8*m  };
+  std::vector<G4double> scintilFast = {1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+                                       1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+                                       1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00};
+
+  std::vector<G4double> scintilSlow = {0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
+                                       7.00, 6.00, 4.00, 3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00, 4.00,
+                                       5.00, 6.00, 7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 5.00, 4.00};
+
+  G4MaterialPropertiesTable *myMPT1 = new G4MaterialPropertiesTable();
+
+  //myMPT1->AddProperty("RINDEX", photonEnergy, refractiveIndex1)->SetSpline(true);
+  //myMPT1->AddProperty("ABSLENGTH", photonEnergy, absorption)->SetSpline(true);
+  int nEntries = photonEnergy.size();
+  myMPT1->AddProperty("RINDEX", photonEnergy, refractiveIndex1, nEntries);
+  myMPT1->AddProperty("ABSLENGTH", photonEnergy, absorption, nEntries);
+  myMPT1->AddProperty("FASTCOMPONENT", photonEnergy, scintilFast, nEntries);
+  myMPT1->AddProperty("SLOWCOMPONENT", photonEnergy, scintilFast, nEntries);
+  //myMPT1->AddProperty("FASTCOMPONENT", photonEnergy, scintilFast)->SetSpline(true);
+  //myMPT1->AddProperty("SLOWCOMPONENT", photonEnergy, scintilSlow)->SetSpline(true);
+  myMPT1->AddProperty("REFLECTIVITY", photonEnergy, reflectivity);
+
+  myMPT1->AddConstProperty("SCINTILLATIONYIELD", 1 / MeV);
+  myMPT1->AddConstProperty("RESOLUTIONSCALE", 1.0);
+  //myMPT1->AddConstProperty("FASTTIMECONSTANT", 0.9 * ns);
+  //myMPT1->AddConstProperty("SLOWTIMECONSTANT", 2.1 * ns);
+  //myMPT1->AddConstProperty("YIELDRATIO", 0.8);
+
+  nai->SetMaterialPropertiesTable(myMPT1);
+
+  G4MaterialPropertiesTable *Air_MPT = new G4MaterialPropertiesTable();
+  //Air_MPT->AddProperty("RINDEX", photonEnergy, refAir)->SetSpline(true);
+  Air_MPT->AddProperty("RINDEX", photonEnergy, refAir, nEntries);
+  worldMat->SetMaterialPropertiesTable(Air_MPT);
+*/
+//------------------------------------------------------------
+// Trying to create optical mirror
+
+// --- Define optical surface properties ---
+   /* G4OpticalSurface* crystalSurface = new G4OpticalSurface("NaISurface");
+    crystalSurface->SetType(dielectric_dielectric);
+    crystalSurface->SetFinish(polished);
+    crystalSurface->SetModel(unified);
+
+    new G4LogicalBorderSurface("NaIBorder", physWorld, physWorld, crystalSurface);*/
+/*
+  G4OpticalSurface *crystalSurface = new G4OpticalSurface("NaISurface");
+  crystalSurface->SetType(dielectric_dielectric);
+  crystalSurface->SetFinish(polished); // Use polished to achieve TIR
+  crystalSurface->SetModel(unified);
+
+  G4OpticalSurface *reflectiveCoating = new G4OpticalSurface("ReflectiveCoating");
+  reflectiveCoating->SetType(dielectric_metal);
+  reflectiveCoating->SetFinish(polished);
+  reflectiveCoating->SetModel(unified);
+
+  // Define reflectivity (Aluminum has ~90% reflectivity)
+  const G4int numEntries            = 2;
+  G4double reflectivity[numEntries] = {0.9, 0.9};
+  reflectiveCoating->SetMaterialPropertiesTable(new G4MaterialPropertiesTable());
+  reflectiveCoating->GetMaterialPropertiesTable()->AddProperty("REFLECTIVITY", photonEnergy, reflectivity, numEntries);
+
+  // Apply the reflective coating to the NaI surface
+  new G4LogicalSkinSurface("NaICoating", logicalCrystal, reflectiveCoating);
+
+  new G4LogicalBorderSurface("NaIBorder", physCrystal, physWorld, crystalSurface);
+*/
+
+
+
+  // Attach sensitive detector
+  // Optics_SensitiveDetector *detector = new Optics_SensitiveDetector("SensitiveDetector", "NaiHits");
+  // G4SDManager::GetSDMpointer()->AddNewDetector(detector);
+  // logicalCrystal->SetSensitiveDetector(detector);
+
+  return physWorld;
+}
