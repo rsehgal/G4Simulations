@@ -39,7 +39,8 @@ void Optics_EventAction::EndOfEventAction(const G4Event *event)
   }
 
   double sigma = 0.040;
-  if (pmtHitCollection->entries() > 1 && totalEnergyDeposited > 0.) {
+  //if (pmtHitCollection->entries() > 1 && totalEnergyDeposited > 0.) 
+  {
     analMan->FillNtupleDColumn(0, 0, eventId);
     analMan->FillNtupleDColumn(0, 1, totalEnergyDeposited);
     analMan->FillNtupleDColumn(0, 2, CLHEP::RandGauss::shoot(totalEnergyDeposited,sigma));
@@ -47,7 +48,8 @@ void Optics_EventAction::EndOfEventAction(const G4Event *event)
     analMan->AddNtupleRow(0);
   }
 
-  if (pmtHitCollection->entries() > 1 && totalEnergyDeposited > 0.) {
+  //if (pmtHitCollection->entries() > 1 && totalEnergyDeposited > 0.) 
+    {
     for (unsigned int i = 0; i < pmtHitCollection->entries(); i++) {
       analMan->FillNtupleDColumn(1, 0, eventId);
       analMan->FillNtupleDColumn(1, 1, (*pmtHitCollection)[i]->GetTime());

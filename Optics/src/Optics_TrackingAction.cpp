@@ -5,6 +5,7 @@
 #include "G4TrackVector.hh"
 #include "G4TrackingManager.hh"
 #include "G4OpticalPhoton.hh"
+#include "G4AnalysisManager.hh"
 Optics_TrackingAction::Optics_TrackingAction() {}
 
 Optics_TrackingAction::~Optics_TrackingAction() {}
@@ -25,7 +26,7 @@ void Optics_TrackingAction::PostUserTrackingAction(const G4Track *track)
     int photonCount         = 0;
     if (secondaries) {
 
-      for (unsigned int i = 0; i < secondaries->size(); i++) {
+    for (unsigned int i = 0; i < secondaries->size(); i++) {
         if ((*secondaries)[i]->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
           photonCount++;
         }
@@ -33,5 +34,6 @@ void Optics_TrackingAction::PostUserTrackingAction(const G4Track *track)
       // std::cout << "No of Photons Generated : " << secondaries->size() << std::endl;
       std::cout << "No of Photons Generated : " << photonCount << std::endl;
     }
+    G4AnalysisManager::Instance()->FillNtupleDColumn(0,4,photonCount);
   }
 }

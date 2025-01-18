@@ -23,6 +23,7 @@ void Optics_RunAction::BeginOfRunAction(const G4Run *)
   fAnalManager->CreateNtupleDColumn("eDep");
   fAnalManager->CreateNtupleDColumn("eDepSmeared");
   fAnalManager->CreateNtupleDColumn("numDetectedPhotons");
+  fAnalManager->CreateNtupleDColumn("numGeneratedPhotons");
   fAnalManager->FinishNtuple();
 
   fAnalManager->CreateNtuple("photons","A pulse tree");
