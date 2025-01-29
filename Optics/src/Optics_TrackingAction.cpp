@@ -32,7 +32,7 @@ void Optics_TrackingAction::PostUserTrackingAction(const G4Track *track)
         }
       }
       // std::cout << "No of Photons Generated : " << secondaries->size() << std::endl;
-      std::cout << "No of Photons Generated : " << photonCount << std::endl;
+      //std::cout << "No of Photons Generated : " << photonCount << std::endl;
     }
     G4AnalysisManager::Instance()->FillNtupleDColumn(0,4,photonCount);
   }

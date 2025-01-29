@@ -11,6 +11,7 @@
 #include "Optics_EventAction.h"
 #include "Optics_TrackingAction.h"
 #include "G4OpticalPhysics.hh"
+#include "Optics_ModularPhysicsList.h"
 
 int main(int argc, char** argv) {
     G4UIExecutive* ui = nullptr;
@@ -21,9 +22,18 @@ int main(int argc, char** argv) {
     G4RunManager* runManager = new G4RunManager;
     runManager->SetUserInitialization(new Optics_DetectorConstruction());
 
-    G4VModularPhysicsList *physicsList = new QGSP_BERT;//QBBC;//FTFP_BERT; // QBBC;
+    //Pre-packaged physics list
+    //G4VModularPhysicsList *physicsList = new QGSP_BERT;//QBBC;//FTFP_BERT; // QBBC;
+
+
+    //Modular Physics list
+    G4VModularPhysicsList *physicsList = new Optics_ModularPhysicsList;
+
+#ifdef USE_OPTICAL_PHOTONS
     G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();
     physicsList->RegisterPhysics(opticalPhysics);
+#endif
+
     runManager->SetUserInitialization(physicsList);
     
     runManager->SetUserAction(new Optics_PrimaryGeneratorAction());

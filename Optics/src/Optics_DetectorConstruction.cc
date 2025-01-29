@@ -52,6 +52,7 @@ G4VPhysicalVolume *Optics_DetectorConstruction::Construct()
 
 // Energy array (photon energies) in eV
 
+#ifdef USE_OPTICAL_PHOTONS
 auto myMPT1 = new G4MaterialPropertiesTable();
 
 // Photon energy array (in eV)
@@ -82,37 +83,43 @@ myMPT1->AddConstProperty("SCINTILLATIONYIELD2", 0.9);
 // Attach the material properties table to the NaI(Tl) material
 nai->SetMaterialPropertiesTable(myMPT1);
 //  nai->SetMaterialPropertiesTable(NaIMPT);
+#endif
 
   G4Material *pmtMaterial = nist->FindOrBuildMaterial("G4_GLASS_PLATE");
   G4double pmtRadius      = crystalRadius;
   G4double pmtThickness   = 1.0 * mm;
 
+
+#ifdef USE_OPTICAL_PHOTONS
   G4double glassRefractiveIndex[nEntries] = {1.50, 1.52};
   G4MaterialPropertiesTable *mptGlass     = new G4MaterialPropertiesTable();
   mptGlass->AddProperty("RINDEX", photonEnergy, glassRefractiveIndex, nEntries);
   pmtMaterial->SetMaterialPropertiesTable(mptGlass);
+#endif
 
   G4Tubs *solidPMT           = new G4Tubs("PMT", 0, pmtRadius, pmtThickness / 2, 0, 360 * deg);
   G4LogicalVolume *logicPMT  = new G4LogicalVolume(solidPMT, pmtMaterial, "LogicalPMT");
   G4VPhysicalVolume *physPMT = new G4PVPlacement(nullptr, G4ThreeVector(0, 0, crystalHeight / 2 + pmtThickness / 2),
                                                  logicPMT, "PhysicalPMT", logicWorld, false, 0);
 
+#ifdef USE_OPTICAL_PHOTONS
   AddOpticalProperties();
+#endif
 
   Optics_SensitiveDetector *naiSD = new Optics_SensitiveDetector("SensitiveNai", "NaiHits");
   G4SDManager::GetSDMpointer()->AddNewDetector(naiSD);
   logicalCrystal->SetSensitiveDetector(naiSD);
 
-
+#ifdef USE_OPTICAL_PHOTONS
   PMT_SD *pmtSD = new PMT_SD("SensitivePMT", "pmtCollection");
   G4SDManager::GetSDMpointer()->AddNewDetector(pmtSD);
   logicPMT->SetSensitiveDetector(pmtSD);
-
 
   G4MaterialPropertiesTable *worldMPT   = new G4MaterialPropertiesTable();
   G4double refractiveIndexAir[nEntries] = {1.00, 1.00};
   worldMPT->AddProperty("RINDEX", photonEnergy, refractiveIndexAir, nEntries);
   worldMat->SetMaterialPropertiesTable(worldMPT);
+#endif
 
   return physWorld;
 }
