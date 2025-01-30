@@ -13,6 +13,7 @@
 #include "G4OpticalPhysics.hh"
 #include "Optics_ModularPhysicsList.h"
 #include "Optics_UserPhysicsList.h"
+#include "Optics_UserPhysicsList_V2.h"
 
 int main(int argc, char** argv) {
     G4UIExecutive* ui = nullptr;
@@ -30,8 +31,11 @@ int main(int argc, char** argv) {
     //Modular Physics list
     //G4VModularPhysicsList *physicsList = new Optics_ModularPhysicsList;
 
-    //User Physics LIst
-    G4VUserPhysicsList *physicsList = new Optics_UserPhysicsList;
+    //User Physics List
+    //G4VUserPhysicsList *physicsList = new Optics_UserPhysicsList;
+
+    //User Physics List using PhysicsListHelper
+    G4VUserPhysicsList *physicsList = new Optics_UserPhysicsList_V2;
 
 #ifdef USE_OPTICAL_PHOTONS
     G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics();

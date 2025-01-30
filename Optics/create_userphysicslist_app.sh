@@ -8,10 +8,14 @@ fi
 
 # Set project name from the argument
 DET_NAME=$1
-
+VER=$2
 # Class names with project name prefix and underscore
-SENSITIVE_DETECTOR="${DET_NAME}_UserPhysicsList"
 
+if [ -z "$2" ]; then
+SENSITIVE_DETECTOR="${DET_NAME}_UserPhysicsList"
+else
+SENSITIVE_DETECTOR="${DET_NAME}_UserPhysicsList_${VER}"
+fi
 
 # Create SensitiveDetector header file
 cat << EOF > ${SENSITIVE_DETECTOR}.h
