@@ -10,33 +10,33 @@ fi
 DET_NAME=$1
 
 # Class names with project name prefix and underscore
-SENSITIVE_DETECTOR="${DET_NAME}_ModularPhysicsList"
+MODULARPHYSICSLIST="${DET_NAME}_ModularPhysicsList"
 
 
-# Create SensitiveDetector header file
-cat << EOF > ${SENSITIVE_DETECTOR}.h
-#ifndef ${SENSITIVE_DETECTOR^^}_HH
-#define ${SENSITIVE_DETECTOR^^}_HH
+# Create Modular Physics  List header file
+cat << EOF > ${MODULARPHYSICSLIST}.h
+#ifndef ${MODULARPHYSICSLIST^^}_HH
+#define ${MODULARPHYSICSLIST^^}_HH
 
 #include "G4VModularPhysicsList.hh"
 
-class ${SENSITIVE_DETECTOR} : public G4VModularPhysicsList {
+class ${MODULARPHYSICSLIST} : public G4VModularPhysicsList {
 public:
-    ${SENSITIVE_DETECTOR}();
-    virtual ~${SENSITIVE_DETECTOR}();
+    ${MODULARPHYSICSLIST}();
+    virtual ~${MODULARPHYSICSLIST}();
 };
 
 #endif
 EOF
 
-# Create SensitiveDetector source file
-cat << EOF > ${SENSITIVE_DETECTOR}.cpp
-#include "${SENSITIVE_DETECTOR}.h"
+# Create Modular Physics  List source file
+cat << EOF > ${MODULARPHYSICSLIST}.cpp
+#include "${MODULARPHYSICSLIST}.h"
 
-${SENSITIVE_DETECTOR}::${SENSITIVE_DETECTOR}()  {
+${MODULARPHYSICSLIST}::${MODULARPHYSICSLIST}()  {
 }
 
-${SENSITIVE_DETECTOR}::~${SENSITIVE_DETECTOR}() {}
+${MODULARPHYSICSLIST}::~${MODULARPHYSICSLIST}() {}
 
 
 EOF

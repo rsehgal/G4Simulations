@@ -10,33 +10,33 @@ fi
 DET_NAME=$1
 
 # Class names with project name prefix and underscore
-SENSITIVE_DETECTOR="${DET_NAME}_Hit"
+HIT="${DET_NAME}_Hit"
 
 
-# Create SensitiveDetector header file
-cat << EOF > ${SENSITIVE_DETECTOR}.h
-#ifndef ${SENSITIVE_DETECTOR^^}_HH
-#define ${SENSITIVE_DETECTOR^^}_HH
+# Create Hit Class header file
+cat << EOF > ${HIT}.h
+#ifndef ${HIT^^}_HH
+#define ${HIT^^}_HH
 
 #include "G4VHit.hh"
 
-class ${SENSITIVE_DETECTOR} : public G4VHit {
+class ${HIT} : public G4VHit {
 public:
-    ${SENSITIVE_DETECTOR}();
-    virtual ~${SENSITIVE_DETECTOR}();
+    ${HIT}();
+    virtual ~${HIT}();
 };
 
 #endif
 EOF
 
-# Create SensitiveDetector source file
-cat << EOF > ${SENSITIVE_DETECTOR}.cpp
-#include "${SENSITIVE_DETECTOR}.h"
+# Create Hit Class source file
+cat << EOF > ${HIT}.cpp
+#include "${HIT}.h"
 
-${SENSITIVE_DETECTOR}::${SENSITIVE_DETECTOR}()  {
+${HIT}::${HIT}()  {
 }
 
-${SENSITIVE_DETECTOR}::~${SENSITIVE_DETECTOR}() {}
+${HIT}::~${HIT}() {}
 
 
 EOF

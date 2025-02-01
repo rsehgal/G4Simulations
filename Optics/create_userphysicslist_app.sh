@@ -12,22 +12,22 @@ VER=$2
 # Class names with project name prefix and underscore
 
 if [ -z "$2" ]; then
-SENSITIVE_DETECTOR="${DET_NAME}_UserPhysicsList"
+USERPHYSICSLIST="${DET_NAME}_UserPhysicsList"
 else
-SENSITIVE_DETECTOR="${DET_NAME}_UserPhysicsList_${VER}"
+USERPHYSICSLIST="${DET_NAME}_UserPhysicsList_${VER}"
 fi
 
-# Create SensitiveDetector header file
-cat << EOF > ${SENSITIVE_DETECTOR}.h
-#ifndef ${SENSITIVE_DETECTOR^^}_HH
-#define ${SENSITIVE_DETECTOR^^}_HH
+# Create User Physics List header file
+cat << EOF > ${USERPHYSICSLIST}.h
+#ifndef ${USERPHYSICSLIST^^}_HH
+#define ${USERPHYSICSLIST^^}_HH
 
 #include "G4VUserPhysicsList.hh"
 
-class ${SENSITIVE_DETECTOR} : public G4VUserPhysicsList {
+class ${USERPHYSICSLIST} : public G4VUserPhysicsList {
 public:
-    ${SENSITIVE_DETECTOR}();
-    virtual ~${SENSITIVE_DETECTOR}();
+    ${USERPHYSICSLIST}();
+    virtual ~${USERPHYSICSLIST}();
     virtual void ConstructParticle(); 
     virtual void ConstructProcess(); 
 };
@@ -35,20 +35,20 @@ public:
 #endif
 EOF
 
-# Create SensitiveDetector source file
-cat << EOF > ${SENSITIVE_DETECTOR}.cpp
-#include "${SENSITIVE_DETECTOR}.h"
+# Create User Physics List source file
+cat << EOF > ${USERPHYSICSLIST}.cpp
+#include "${USERPHYSICSLIST}.h"
 
-${SENSITIVE_DETECTOR}::${SENSITIVE_DETECTOR}()  {
+${USERPHYSICSLIST}::${USERPHYSICSLIST}()  {
 }
 
-${SENSITIVE_DETECTOR}::~${SENSITIVE_DETECTOR}() {}
+${USERPHYSICSLIST}::~${USERPHYSICSLIST}() {}
 
-void ${SENSITIVE_DETECTOR}::ConstructParticle(){
+void ${USERPHYSICSLIST}::ConstructParticle(){
 //std::cout <<"RAMAN : Construct Particle....." << std::endl;
 }
 
-void ${SENSITIVE_DETECTOR}::ConstructProcess(){
+void ${USERPHYSICSLIST}::ConstructProcess(){
 //std::cout <<"SEHGAL : Construct Process....." << std::endl;
 }
 
