@@ -3,6 +3,10 @@
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RandomTools.hh"
+
+short Tracking_PrimaryGeneratorAction::fGunType = 0;
+
 Tracking_PrimaryGeneratorAction::Tracking_PrimaryGeneratorAction() {
     G4int n_particle = 1;
     fParticleGun = new G4ParticleGun(n_particle);
@@ -25,6 +29,19 @@ void Tracking_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
     
     //TODO :  Logic to change the particle position for each event
-   
+    //Changing particle position within a square of 5 cm x 5 cm
+    G4double randX = -5.0 * cm + 10.0 * cm * G4UniformRand();
+    G4double randY = -5.0 * cm + 10.0 * cm * G4UniformRand();
+    G4ThreeVector pos(randX,randY,-150*cm);
+    if(fGunType==0){
+	fParticleGun->SetParticleDefinition(G4ParticleTable::GetParticleTable()->FindParticle("mu-"));
+        fGunType = 1;
+    }
+    else{
+	fParticleGun->SetParticleDefinition(G4ParticleTable::GetParticleTable()->FindParticle("mu+"));
+	fGunType = 0;
+    }
+    fParticleGun->SetParticlePosition(pos);
+       
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
