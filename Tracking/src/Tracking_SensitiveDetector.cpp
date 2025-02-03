@@ -29,7 +29,7 @@ G4bool Tracking_SensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory*
 
        if(preStepPt->GetStepStatus()==fGeomBoundary){
     	    G4ThreeVector pos = preStepPt->GetPosition();
-	    G4ThreeVector momDir = preStepPt->GetMomentumDirection();
+	    G4ThreeVector momDir = preStepPt->GetMomentum();//Direction();
    	    G4String name = track->GetVolume()->GetName();
 	    std::cout << name << " : Pos : " << pos << " : Momentum Direction : " << momDir  <<  std::endl;
 

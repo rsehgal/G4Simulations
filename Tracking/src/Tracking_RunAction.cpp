@@ -13,6 +13,10 @@ void Tracking_RunAction::BeginOfRunAction(const G4Run*){
     fAnalMan->CreateNtupleDColumn("posX");
     fAnalMan->CreateNtupleDColumn("posY");
     fAnalMan->CreateNtupleDColumn("posZ");
+    fAnalMan->CreateNtupleDColumn("smearedPosX");
+    fAnalMan->CreateNtupleDColumn("smearedPosY");
+    fAnalMan->CreateNtupleDColumn("smearedPosZ");
+
     fAnalMan->CreateNtupleDColumn("momentumX");
     fAnalMan->CreateNtupleDColumn("momentumY");
     fAnalMan->CreateNtupleDColumn("momentumZ");
