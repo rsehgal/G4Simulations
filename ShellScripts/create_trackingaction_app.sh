@@ -10,21 +10,21 @@ fi
 DET_NAME=$1
 
 # Class names with project name prefix and underscore
-SENSITIVE_DETECTOR="${DET_NAME}_TrackingAction"
+TRACKING_ACTION="${DET_NAME}_TrackingAction"
 
 
-# Create SensitiveDetector header file
-cat << EOF > ${SENSITIVE_DETECTOR}.h
-#ifndef ${SENSITIVE_DETECTOR^^}_HH
-#define ${SENSITIVE_DETECTOR^^}_HH
+# Create TrackingAction header file
+cat << EOF > ${TRACKING_ACTION}.h
+#ifndef ${TRACKING_ACTION^^}_HH
+#define ${TRACKING_ACTION^^}_HH
 
 #include "G4UserTrackingAction.hh"
 #include "G4Track.hh"
 
-class ${SENSITIVE_DETECTOR} : public G4UserTrackingAction {
+class ${TRACKING_ACTION} : public G4UserTrackingAction {
 public:
-    ${SENSITIVE_DETECTOR}();
-    virtual ~${SENSITIVE_DETECTOR}();
+    ${TRACKING_ACTION}();
+    virtual ~${TRACKING_ACTION}();
     virtual void PreUserTrackingAction(const G4Track *track);
     virtual void PostUserTrackingAction(const G4Track *track);
 };
@@ -32,23 +32,23 @@ public:
 #endif
 EOF
 
-# Create SensitiveDetector source file
-cat << EOF > ${SENSITIVE_DETECTOR}.cpp
-#include "${SENSITIVE_DETECTOR}.h"
+# Create TrackingAction source file
+cat << EOF > ${TRACKING_ACTION}.cpp
+#include "${TRACKING_ACTION}.h"
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4SystemOfUnits.hh"
 
-${SENSITIVE_DETECTOR}::${SENSITIVE_DETECTOR}()  {
+${TRACKING_ACTION}::${TRACKING_ACTION}()  {
 }
 
-${SENSITIVE_DETECTOR}::~${SENSITIVE_DETECTOR}() {}
+${TRACKING_ACTION}::~${TRACKING_ACTION}() {}
 
-void ${SENSITIVE_DETECTOR}::PreUserTrackingAction(const G4Track *track){
+void ${TRACKING_ACTION}::PreUserTrackingAction(const G4Track *track){
 std::cout <<"RAMAN : Tracking Action begin....." << std::endl;
 }
 
-void ${SENSITIVE_DETECTOR}::PostUserTrackingAction(const G4Track *track){
+void ${TRACKING_ACTION}::PostUserTrackingAction(const G4Track *track){
 std::cout <<"SEHGAL : Tracking Action ends....." << std::endl;
 }
 
