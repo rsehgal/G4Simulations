@@ -6,7 +6,13 @@
 #include "G4AnalysisManager.hh"
 #include "G4RandomTools.hh"
 #include "G4EventManager.hh"
-NaI_SensitiveDetector::NaI_SensitiveDetector(const G4String &name) : G4VSensitiveDetector(name), fEDep(0) {}
+#include "TFile.h"
+
+NaI_SensitiveDetector::NaI_SensitiveDetector(const G4String &name) : G4VSensitiveDetector(name), fEDep(0) {
+TFile *fp = new TFile("calib2.root","r");
+fResolFun = (TF1*)fp->Get("resFunc");
+fp->Close();
+}
 
 NaI_SensitiveDetector::~NaI_SensitiveDetector() {}
 
@@ -33,7 +39,10 @@ void NaI_SensitiveDetector::EndOfEvent(G4HCofThisEvent *hce)
 	std::cout << eventID << " events processed....." << std::endl;
   if (fEDep > 0.) {
     analMan->FillNtupleDColumn(0,0, fEDep*1000.);
-    analMan->FillNtupleDColumn(0,1, G4RandGauss::shoot(fEDep,0.04385)*1000.);
+    //analMan->FillNtupleDColumn(0,1, G4RandGauss::shoot(fEDep,0.04385)*1000.);
+    double sigma = fResolFun->Eval(fEDep*1000.);
+    //std::cout << "EDep : " << (fEDep*1000) << " : Sigma : " <<  sigma << std::endl;
+    analMan->FillNtupleDColumn(0,1,G4RandGauss::shoot(fEDep*1000.,sigma) );
     analMan->AddNtupleRow(0);
   }
 }

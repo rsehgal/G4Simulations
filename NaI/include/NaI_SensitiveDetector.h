@@ -2,13 +2,15 @@
 #define NAI_SENSITIVEDETECTOR_HH
 
 #include "G4VSensitiveDetector.hh"
+#include "TFile.h"
+#include "TF1.h"
 
 class G4HCofThisEvent;
 
 class NaI_SensitiveDetector : public G4VSensitiveDetector {
 
   double fEDep;
-
+  TF1 *fResolFun;
 public:
   NaI_SensitiveDetector(const G4String &name);
   virtual ~NaI_SensitiveDetector();

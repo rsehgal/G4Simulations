@@ -22,13 +22,28 @@ G4VPhysicalVolume *NaI_DetectorConstruction::Construct()
   G4LogicalVolume *logicWorld  = new G4LogicalVolume(solidWorld, worldMat, "World");
   G4VPhysicalVolume *physWorld = new G4PVPlacement(nullptr, G4ThreeVector(), logicWorld, "World", nullptr, false, 0);
 
+  
+
   // TODO : Create your desired detectors here
   double crystalDia = 5.7 * cm;
   double crystalHeight = 5.3 * cm;
   G4Material *naiMaterial = nist->FindOrBuildMaterial("G4_SODIUM_IODIDE");
   G4Tubs *naiCrystal   = new G4Tubs("NaiCrystal", 0., crystalDia/2., crystalHeight / 2., 0, 2 * M_PI);
   G4LogicalVolume *logicalNaiCrystal = new G4LogicalVolume(naiCrystal,naiMaterial,"LogicalNaiCrystal");
-  new G4PVPlacement(nullptr,G4ThreeVector(),logicalNaiCrystal,"PhysicalNaiCrystal",logicWorld,false,true);
+  new G4PVPlacement(nullptr,G4ThreeVector(),logicalNaiCrystal,"PhysicalNaiCrystal",logicWorld,false,0,true); 
+  //Lets also create encasing of crystal
+  G4Material *naiCasingMaterial = nist->FindOrBuildMaterial("G4_Al");
+  G4Tubs *naiCrystalCasing   = new G4Tubs("NaiCrystalCasing", crystalDia/2.+0.5*mm, crystalDia/2.+1.5*mm, crystalHeight / 2., 0, 2 * M_PI);
+  G4LogicalVolume *logicalNaiCrystalCasing = new G4LogicalVolume(naiCrystalCasing,naiCasingMaterial,"LogicalNaiCrystalCasing");
+  new G4PVPlacement(nullptr,G4ThreeVector(),logicalNaiCrystalCasing,"PhysicalNaiCrystalCasing",logicWorld,false,0,true); 
+
+  //End Caps
+  double endCapHeight=1.*mm;
+ G4Tubs *naiCrystalCasingEndCap   = new G4Tubs("NaiCrystalCasing",0. , crystalDia/2.+1.5*mm, endCapHeight / 2., 0, 2 * M_PI);
+  G4LogicalVolume *logicalNaiCrystalCasingEndCap = new G4LogicalVolume(naiCrystalCasingEndCap,naiCasingMaterial,"LogicalNaiCrystalCasingEndCap");
+  new G4PVPlacement(nullptr,G4ThreeVector(0.,0.,-1.*(crystalHeight/2.+endCapHeight/2.+0.00001)),logicalNaiCrystalCasingEndCap,"PhysicalNaiCrystalCasingEndCap",logicWorld,false,0,true); 
+  new G4PVPlacement(nullptr,G4ThreeVector(0.,0.,(crystalHeight/2.+endCapHeight/2.+0.00001)),logicalNaiCrystalCasingEndCap,"PhysicalNaiCrystalCasingEndCap",logicWorld,false,1,true); 
+
 
   // Logic to Attach sensitive detector to a logical volume
   // NaI_SensitiveDetector* detector = new NaI_SensitiveDetector("SensitiveDetector");

@@ -11,6 +11,13 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+#ROOT
+find_package(ROOT REQUIRED)
+#message(STATUS ${ROOT_INCLUDE_DIRS})
+#message(STATUS ${ROOT_LIBRARIES})
+include_directories(${ROOT_INCLUDE_DIRS})
+
+
 # Include directories
 include_directories(${Geant4_INCLUDE_DIRS} include)
 
@@ -23,7 +30,7 @@ file(COPY ${MAC_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 add_executable(${PROJECT_NAME} ${SOURCES} NaI.cpp)
 
 # Link with Geant4 libraries
-target_link_libraries(${PROJECT_NAME} ${Geant4_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 # Set C++ standard
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)

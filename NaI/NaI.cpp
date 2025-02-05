@@ -1,6 +1,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "QGSP_BERT.hh"
+#include "QGSP_BERT_HP.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
@@ -16,7 +17,7 @@ int main(int argc, char** argv) {
 
     G4RunManager* runManager = new G4RunManager;
     runManager->SetUserInitialization(new NaI_DetectorConstruction());
-    runManager->SetUserInitialization(new QGSP_BERT);
+    runManager->SetUserInitialization(new QGSP_BERT_HP);
     runManager->SetUserAction(new NaI_PrimaryGeneratorAction());
     runManager->SetUserAction(new NaI_RunAction());
 

@@ -3,8 +3,9 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
-
+#include "G4ThreeVector.hh"
 class NaI_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+  G4ThreeVector fGunPos;
 public:
     NaI_PrimaryGeneratorAction();
     virtual ~NaI_PrimaryGeneratorAction();
