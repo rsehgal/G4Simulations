@@ -26,7 +26,7 @@ G4VPhysicalVolume *NaI_DetectorConstruction::Construct()
 
   // TODO : Create your desired detectors here
   double crystalDia = 5.7 * cm;
-  double crystalHeight = 5.3 * cm;
+  double crystalHeight = 8 * cm;
   G4Material *naiMaterial = nist->FindOrBuildMaterial("G4_SODIUM_IODIDE");
   G4Tubs *naiCrystal   = new G4Tubs("NaiCrystal", 0., crystalDia/2., crystalHeight / 2., 0, 2 * M_PI);
   G4LogicalVolume *logicalNaiCrystal = new G4LogicalVolume(naiCrystal,naiMaterial,"LogicalNaiCrystal");

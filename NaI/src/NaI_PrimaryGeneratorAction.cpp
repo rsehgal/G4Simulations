@@ -36,7 +36,7 @@ void NaI_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     G4ThreeVector randPosOnDis(xposOnDis,yposOnDis,zposOnDis);
     G4ThreeVector dir = (randPosOnDis-fGunPos).unit();
          
-    fParticleGun->SetParticleMomentumDirection(dir);
+    //fParticleGun->SetParticleMomentumDirection(dir);
         
    
     fParticleGun->GeneratePrimaryVertex(anEvent);

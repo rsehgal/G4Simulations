@@ -5,10 +5,16 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
+#include "G4EmLivermorePhysics.hh"
 #include "NaI_DetectorConstruction.h"
 #include "NaI_PrimaryGeneratorAction.h"
 #include "NaI_SteppingAction.h"
 #include "NaI_RunAction.h"
+
+#include "NaI_ModularPhysicsList.h"
+//#include "G4VModularPhysicsList.hh"
+//#include "G4PhysListFactory.hh"
+
 int main(int argc, char** argv) {
     G4UIExecutive* ui = nullptr;
     if (argc == 1) {
@@ -17,7 +23,12 @@ int main(int argc, char** argv) {
 
     G4RunManager* runManager = new G4RunManager;
     runManager->SetUserInitialization(new NaI_DetectorConstruction());
-    runManager->SetUserInitialization(new QGSP_BERT_HP);
+    //runManager->SetUserInitialization(new QGSP_BERT_HP);
+    //runManager->SetUserInitialization(new FTFP_BERT_LIV);
+    //G4VModularPhysicsList* physicsList = new G4PhysListFactory()->GetReferencePhysList("FTFP_BERT_LIV");
+    //runManager->SetUserInitialization(physicsList);
+
+    runManager->SetUserInitialization(new NaI_ModularPhysicsList());
     runManager->SetUserAction(new NaI_PrimaryGeneratorAction());
     runManager->SetUserAction(new NaI_RunAction());
 
