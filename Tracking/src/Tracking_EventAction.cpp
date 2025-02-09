@@ -52,7 +52,8 @@ void Tracking_EventAction::EndOfEventAction(const G4Event *event){
 	analMan->FillNtupleDColumn(0,7,hit->GetMomentumDirection().y());
 	analMan->FillNtupleDColumn(0,8,hit->GetMomentumDirection().z());
 
-	analMan->FillNtupleDColumn(0,9,eventNo);
+	analMan->FillNtupleDColumn(0,9,hit->GetLayerNo());
+	analMan->FillNtupleDColumn(0,10,eventNo);
         analMan->AddNtupleRow(0);
     } 
     std::cout <<"=======================================" << std::endl;

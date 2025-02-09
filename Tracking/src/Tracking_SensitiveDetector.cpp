@@ -31,9 +31,10 @@ G4bool Tracking_SensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory*
     	    G4ThreeVector pos = preStepPt->GetPosition();
 	    G4ThreeVector momDir = preStepPt->GetMomentum();//Direction();
    	    G4String name = track->GetVolume()->GetName();
+            G4int layerNo = track->GetVolume()->GetCopyNo();
 	    std::cout << name << " : Pos : " << pos << " : Momentum Direction : " << momDir  <<  std::endl;
 
-    	    hit->Set(pos,momDir,name);
+    	    hit->Set(pos,momDir,name,layerNo);
 	    
   	    fLayersHitsCollection->insert(hit);
     }

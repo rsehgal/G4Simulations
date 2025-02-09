@@ -32,7 +32,7 @@ void Tracking_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     //Changing particle position within a square of 5 cm x 5 cm
     G4double randX = -5.0 * cm + 10.0 * cm * G4UniformRand();
     G4double randY = -5.0 * cm + 10.0 * cm * G4UniformRand();
-    G4ThreeVector pos(randX,randY,-150*cm);
+    G4ThreeVector pos(randX,randY,-200*cm);
     if(fGunType==0){
 	fParticleGun->SetParticleDefinition(G4ParticleTable::GetParticleTable()->FindParticle("mu-"));
         fGunType = 1;

@@ -20,6 +20,7 @@ void Tracking_RunAction::BeginOfRunAction(const G4Run*){
     fAnalMan->CreateNtupleDColumn("momentumX");
     fAnalMan->CreateNtupleDColumn("momentumY");
     fAnalMan->CreateNtupleDColumn("momentumZ");
+    fAnalMan->CreateNtupleDColumn("layerNo");
     fAnalMan->CreateNtupleDColumn("eventNo");
     fAnalMan->FinishNtuple();
 

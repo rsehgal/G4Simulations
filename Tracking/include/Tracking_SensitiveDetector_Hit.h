@@ -8,6 +8,7 @@ private:
     G4ThreeVector fPosition;
     G4String fVolumeName;
     G4ThreeVector fMomentumDirection;
+    G4int fLayerNo;
 public:
     Tracking_SensitiveDetector_Hit();
     Tracking_SensitiveDetector_Hit(G4ThreeVector pos, G4ThreeVector momDir, G4String name);
@@ -17,10 +18,12 @@ public:
     void SetMomentumDirection(G4ThreeVector momDir);
     void SetVolumeName(G4String name);
     void Set(G4ThreeVector pos, G4ThreeVector momDir, G4String name);
+    void Set(G4ThreeVector pos, G4ThreeVector momDir, G4String name, G4int layerNo);
 
     G4ThreeVector GetPosition() const;
     G4ThreeVector GetMomentumDirection() const;
     G4String GetVolumeName() const;
+    G4int GetLayerNo() const;
 
     void Print();
 };
