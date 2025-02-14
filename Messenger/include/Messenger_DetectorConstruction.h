@@ -11,6 +11,8 @@ class Messenger_DetectorConstruction : public G4VUserDetectorConstruction {
     G4GenericMessenger *fMessenger;
     G4String fMessengerTarget;
     G4String fMessengerTargetColor;
+    G4bool fOverlapCheck;
+    double fWorldSize;
 
 public:
     Messenger_DetectorConstruction();
@@ -23,6 +25,7 @@ public:
     void SetXHalfLength(double size);
     void SetYHalfLength(double size);
     void SetZHalfLength(double size);
+    void EnableOverlapCheck(G4bool overlapCheck);
     void SetColor();
 };
 
