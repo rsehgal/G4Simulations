@@ -10,8 +10,9 @@
 #include "NaI_PrimaryGeneratorAction.h"
 #include "NaI_SteppingAction.h"
 #include "NaI_RunAction.h"
-
+#include "NaI_TrackingAction.h"
 #include "NaI_ModularPhysicsList.h"
+#include "NaI_EventAction.h"
 //#include "G4VModularPhysicsList.hh"
 //#include "G4PhysListFactory.hh"
 
@@ -31,6 +32,8 @@ int main(int argc, char** argv) {
     runManager->SetUserInitialization(new NaI_ModularPhysicsList());
     runManager->SetUserAction(new NaI_PrimaryGeneratorAction());
     runManager->SetUserAction(new NaI_RunAction());
+    runManager->SetUserAction(new NaI_EventAction());
+    runManager->SetUserAction(new NaI_TrackingAction());
 
     G4VisManager* visManager = new G4VisExecutive();
     visManager->Initialize();
