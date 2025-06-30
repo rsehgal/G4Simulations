@@ -6,6 +6,7 @@
 #include "algorithm"
 #include "G4AnalysisManager.hh"
 #include "G4EventManager.hh"
+#include "Helpers.h"
 NonSegmented_SensitiveDetector::NonSegmented_SensitiveDetector(const G4String &name) : G4VSensitiveDetector(name)
 {
   vecOfArrivalTime_PMT.resize(4);
@@ -46,15 +47,22 @@ void NonSegmented_SensitiveDetector::EndOfEvent(G4HCofThisEvent *hitCollection)
   unsigned int eventId       = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
   G4AnalysisManager *analMan = G4AnalysisManager::Instance();
   for (unsigned int i = 0; i < vecOfArrivalTime_PMT.size(); i++) {
-    std::sort(vecOfArrivalTime_PMT[i].begin(), vecOfArrivalTime_PMT[i].end());
 
+#if(0)
+    std::sort(vecOfArrivalTime_PMT[i].begin(), vecOfArrivalTime_PMT[i].end());
     int timeIndex = 0.2 * vecOfArrivalTime_PMT[i].size();
+    unsigned int timing = vecOfArrivalTime_PMT[i][timeIndex];   
+    std::cout << "Timing : " << timing << std::endl; 
+    analMan->FillNtupleDColumn(0, 1, vecOfArrivalTime_PMT[i][timeIndex]);
+#else
+    double timing = GetTiming(vecOfArrivalTime_PMT[i]);   
+    //std::cout << "Timing : " << timing << std::endl; 
+    analMan->FillNtupleDColumn(0, 1, timing);
 
     analMan->FillNtupleDColumn(0, 0, i);
-    analMan->FillNtupleDColumn(0, 1, vecOfArrivalTime_PMT[i][timeIndex]);
     analMan->FillNtupleDColumn(0, 2, eventId);
     analMan->AddNtupleRow(0);
-
+#endif
     /*std::cout << "========= PMT : " << (i + 1) << " :: Size : " << vecOfArrivalTime_PMT[i].size() << " :: Arrival Time
     using 20% quantile : "<< vecOfArrivalTime_PMT[i][timeIndex]<< " ===========" << std::endl;
 
