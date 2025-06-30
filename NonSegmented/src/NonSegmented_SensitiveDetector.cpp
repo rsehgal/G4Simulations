@@ -80,11 +80,14 @@ void NonSegmented_SensitiveDetector::EndOfEvent(G4HCofThisEvent *hitCollection)
   }
   if (detectedByAll) {
     //std::cout << "All PMT fired............." << std::endl;
-    int timeIndex   = 0.2 * vecOfArrivalTime_PMT[0].size();
-    double pmt0Time = vecOfArrivalTime_PMT[0][timeIndex];
+
+    //int timeIndex   = 0.2 * vecOfArrivalTime_PMT[0].size();
+    //double pmt0Time = vecOfArrivalTime_PMT[0][timeIndex];
+    double timing0 = GetTiming(vecOfArrivalTime_PMT[0]);
     for (unsigned int i = 1; i < vecOfArrivalTime_PMT.size(); i++) {
-      timeIndex = 0.2 * vecOfArrivalTime_PMT[i].size();
-      analMan->FillNtupleDColumn(1, i - 1, pmt0Time - vecOfArrivalTime_PMT[i][timeIndex]);
+      //timeIndex = 0.2 * vecOfArrivalTime_PMT[i].size();
+      //analMan->FillNtupleDColumn(1, i - 1, pmt0Time - vecOfArrivalTime_PMT[i][timeIndex]);
+      analMan->FillNtupleDColumn(1, i - 1, timing0 - GetTiming(vecOfArrivalTime_PMT[i]));
     }
     analMan->AddNtupleRow(1);
   }
