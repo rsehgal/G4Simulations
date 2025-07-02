@@ -22,7 +22,7 @@ void NonSegmented_EventAction::EndOfEventAction(const G4Event *event)
   // TODO : All the required logic you want to do at the end
   //        of each event
 
-  std::cout << "======================================" << std::endl;
+  //std::cout << "======================================" << std::endl;
   G4AnalysisManager *analMan = G4AnalysisManager::Instance();
 
   G4HCofThisEvent *hce = event->GetHCofThisEvent();
@@ -57,7 +57,7 @@ void NonSegmented_EventAction::EndOfEventAction(const G4Event *event)
 
       // Get Hit point on Slab, currently taking the hit point on top surface
       NonSegmented_Slab_Hit *slabHit = (*slabHitCollection)[0];
-      slabHit->Print();
+      //slabHit->Print();
       analMan->FillNtupleDColumn(1, 3, slabHit->GetX());
       analMan->FillNtupleDColumn(1, 4, slabHit->GetZ());
       analMan->AddNtupleRow(1);
