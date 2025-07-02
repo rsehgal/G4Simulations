@@ -20,6 +20,8 @@ void NonSegmented_RunAction::BeginOfRunAction(const G4Run *)
   analMan->CreateNtupleDColumn("delT_21");
   analMan->CreateNtupleDColumn("delT_31");
   analMan->CreateNtupleDColumn("delT_41");
+  analMan->CreateNtupleDColumn("x");
+  analMan->CreateNtupleDColumn("z");
   analMan->FinishNtuple();
 
 }

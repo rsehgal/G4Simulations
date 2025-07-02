@@ -12,6 +12,7 @@
 #include "G4VModularPhysicsList.hh"
 #include "G4OpticalPhysics.hh"
 
+#include "NonSegmented_EventAction.h"
 #include "NonSegmented_RunAction.h"
 int main(int argc, char** argv) {
     G4UIExecutive* ui = nullptr;
@@ -30,6 +31,7 @@ int main(int argc, char** argv) {
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction());
     runManager->SetUserAction(new NonSegmented_RunAction());
+    runManager->SetUserAction(new NonSegmented_EventAction());
     //runManager->SetUserAction(new NonSegmented_SteppingAction());
 
     G4VisManager* visManager = new G4VisExecutive();

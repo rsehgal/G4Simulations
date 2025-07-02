@@ -10,6 +10,9 @@
 #include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
+#include "NonSegmented_PMT_SD.h"
+#include "NonSegmented_Slab_SD.h"
+
 NonSegmented_DetectorConstruction::NonSegmented_DetectorConstruction() {}
 
 NonSegmented_DetectorConstruction::~NonSegmented_DetectorConstruction() {}
@@ -92,7 +95,7 @@ void NonSegmented_DetectorConstruction::AttachOpticalProperties(G4Material *scin
   mptCrystal->AddProperty("ABSLENGTH", photonEnergy, absorption, nEntries);
   mptCrystal->AddProperty("SCINTILLATIONCOMPONENT1", photonEnergy, scintSpectrum, nEntries);
   mptCrystal->AddProperty("SCINTILLATIONCOMPONENT2", photonEnergy, scintSpectrum, nEntries);
-  mptCrystal->AddConstProperty("SCINTILLATIONYIELD", 1000. / MeV);
+  mptCrystal->AddConstProperty("SCINTILLATIONYIELD", 100. / MeV);
   mptCrystal->AddConstProperty("RESOLUTIONSCALE", 1.0);
   mptCrystal->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 2.1 * ns);
   mptCrystal->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 10. * ns);
@@ -142,9 +145,14 @@ rotY90->rotateY(90.*deg);
 
 
   // Logic to Attach sensitive detector to a logical volume
-  NonSegmented_SensitiveDetector* detector = new NonSegmented_SensitiveDetector("SensitiveDetector");
+  //NonSegmented_SensitiveDetector* detector = new NonSegmented_SensitiveDetector("SensitiveDetector");
+  NonSegmented_PMT_SD* detector = new NonSegmented_PMT_SD("SensitiveDetectorPMT","PMT");
   G4SDManager::GetSDMpointer()->AddNewDetector(detector);
   pmtLogical->SetSensitiveDetector(detector);
+
+  NonSegmented_Slab_SD* detectorSlab = new NonSegmented_Slab_SD("SensitiveDetectorSlab","Slab");
+  G4SDManager::GetSDMpointer()->AddNewDetector(detectorSlab);
+  scintSlabLogical->SetSensitiveDetector(detectorSlab);
 
   return physWorld;
 }

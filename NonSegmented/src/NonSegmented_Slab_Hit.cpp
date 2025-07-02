@@ -1,0 +1,26 @@
+#include "NonSegmented_Slab_Hit.h"
+
+NonSegmented_Slab_Hit::NonSegmented_Slab_Hit() : x(0.), z(0.) {}
+
+NonSegmented_Slab_Hit::~NonSegmented_Slab_Hit() {}
+
+void NonSegmented_Slab_Hit::Set(double X, double Z)
+{
+  x = X;
+  z = Z;
+}
+
+double NonSegmented_Slab_Hit::GetX() const
+{
+  return x;
+}
+
+double NonSegmented_Slab_Hit::GetZ() const
+{
+  return z;
+}
+
+void NonSegmented_Slab_Hit::Print()
+{
+  std::cout << "(" << x << " , " << z << ")" << std::endl;
+}
