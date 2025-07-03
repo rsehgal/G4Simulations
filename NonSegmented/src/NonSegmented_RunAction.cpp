@@ -2,13 +2,15 @@
 #include "G4Run.hh"
 #include "G4AnalysisManager.hh"
 NonSegmented_RunAction::NonSegmented_RunAction() {}
+NonSegmented_RunAction::NonSegmented_RunAction(G4String outfileName) : fOutfileName(outfileName) {}
 
 NonSegmented_RunAction::~NonSegmented_RunAction() {}
 
 void NonSegmented_RunAction::BeginOfRunAction(const G4Run *)
 {
   G4AnalysisManager *analMan = G4AnalysisManager::Instance();
-  analMan->OpenFile("out.root");
+  //analMan->OpenFile("out.root");
+  analMan->OpenFile(fOutfileName);
   // Creating a TTree
   analMan->CreateNtuple("ftree", "A simple tree");
   analMan->CreateNtupleDColumn("pmtNo");

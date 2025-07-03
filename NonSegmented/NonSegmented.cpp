@@ -20,6 +20,7 @@ int main(int argc, char** argv) {
         ui = new G4UIExecutive(argc, argv);
     }
 
+    G4String outfileName = argv[2];
     G4RunManager* runManager = new G4RunManager;
 
     G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics;
@@ -30,7 +31,7 @@ int main(int argc, char** argv) {
     //runManager->SetUserInitialization(new QGSP_BERT);
     runManager->SetUserInitialization(physicsList);
     runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction());
-    runManager->SetUserAction(new NonSegmented_RunAction());
+    runManager->SetUserAction(new NonSegmented_RunAction(outfileName));
     runManager->SetUserAction(new NonSegmented_EventAction());
     //runManager->SetUserAction(new NonSegmented_SteppingAction());
 

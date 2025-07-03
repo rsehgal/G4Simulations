@@ -33,7 +33,7 @@ void NonSegmented_EventAction::EndOfEventAction(const G4Event *event)
   PMT_HitCollection *pmtHitCollection   = static_cast<PMT_HitCollection *>(hce->GetHC(hcID_PMT));
   Slab_HitCollection *slabHitCollection = static_cast<Slab_HitCollection *>(hce->GetHC(hcID_Slab));
 
-  if (pmtHitCollection && slabHitCollection) {
+  if (pmtHitCollection->entries() > 0 && slabHitCollection->entries() > 0) {
     // std::cout << "Genuine hit collection found...." << std::endl;
 
     std::vector<std::vector<double>> vecOfPhotonArrivalTime(4);
