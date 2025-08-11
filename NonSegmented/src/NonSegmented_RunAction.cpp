@@ -19,9 +19,17 @@ void NonSegmented_RunAction::BeginOfRunAction(const G4Run *)
   analMan->FinishNtuple();
 
   analMan->CreateNtuple("delTTree", "A simple tree storing diff of 2,3&4 Pmt with 1");
-  analMan->CreateNtupleDColumn("delT_21");
+  /*analMan->CreateNtupleDColumn("delT_21");
   analMan->CreateNtupleDColumn("delT_31");
-  analMan->CreateNtupleDColumn("delT_41");
+  analMan->CreateNtupleDColumn("delT_41");*/
+  analMan->CreateNtupleDColumn("t0");
+  analMan->CreateNtupleDColumn("t1");
+  analMan->CreateNtupleDColumn("t2");
+  analMan->CreateNtupleDColumn("t3");
+  analMan->CreateNtupleDColumn("q0");
+  analMan->CreateNtupleDColumn("q1");
+  analMan->CreateNtupleDColumn("q2");
+  analMan->CreateNtupleDColumn("q3");
   analMan->CreateNtupleDColumn("x");
   analMan->CreateNtupleDColumn("z");
   analMan->FinishNtuple();

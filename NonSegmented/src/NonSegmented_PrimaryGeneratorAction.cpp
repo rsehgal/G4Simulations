@@ -3,6 +3,9 @@
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SystemOfUnits.hh"
+#include "CLHEP/Random/RandFlat.h"
+
+
 NonSegmented_PrimaryGeneratorAction::NonSegmented_PrimaryGeneratorAction() {
     G4int n_particle = 1;
     fParticleGun = new G4ParticleGun(n_particle);
@@ -26,6 +29,17 @@ void NonSegmented_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
     
     //TODO :  Logic to change the particle position for each event
-   
+
+  double ypos = 500;
+#define RANDOM_POS
+#ifdef RANDOM_POS
+  //double randX1 = CLHEP::RandFlat::shoot(-250.,250.);
+  //double randZ1 = CLHEP::RandFlat::shoot(-250.,250.);
+
+  double randX1 = CLHEP::RandFlat::shoot(-30.,30.);
+  double randZ1 = CLHEP::RandFlat::shoot(-30.,30.);
+
+  fParticleGun->SetParticlePosition(G4ThreeVector(randX1,ypos,randZ1));
+#endif
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }

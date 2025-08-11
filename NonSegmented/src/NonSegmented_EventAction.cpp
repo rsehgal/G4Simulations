@@ -6,6 +6,8 @@
 #include "NonSegmented_Slab_Hit.h"
 #include "G4AnalysisManager.hh"
 #include "Helpers.h"
+//#include "G4RandGauss.hh"
+#include "Randomize.hh"""
 
 NonSegmented_EventAction::NonSegmented_EventAction() {}
 
@@ -50,16 +52,19 @@ void NonSegmented_EventAction::EndOfEventAction(const G4Event *event)
       detectedByAll &= vecOfPhotonArrivalTime[i].size() > 0;
     }
     if (detectedByAll) {
-      double timing0 = GetTiming(vecOfPhotonArrivalTime[0]);
+      /*double timing0 = GetTiming(vecOfPhotonArrivalTime[0]);
       for (unsigned int i = 1; i < vecOfPhotonArrivalTime.size(); i++) {
         analMan->FillNtupleDColumn(1, i - 1, timing0 - GetTiming(vecOfPhotonArrivalTime[i]));
+      }*/
+	for (unsigned int i = 0; i < vecOfPhotonArrivalTime.size(); i++) {
+        analMan->FillNtupleDColumn(1, i , GetTiming(vecOfPhotonArrivalTime[i])+biasVec[i]+G4RandGauss::shoot(0.0, stdVec[i]));
+        analMan->FillNtupleDColumn(1, i+4 , vecOfPhotonArrivalTime[i].size());
       }
-
       // Get Hit point on Slab, currently taking the hit point on top surface
       NonSegmented_Slab_Hit *slabHit = (*slabHitCollection)[0];
       //slabHit->Print();
-      analMan->FillNtupleDColumn(1, 3, slabHit->GetX());
-      analMan->FillNtupleDColumn(1, 4, slabHit->GetZ());
+      analMan->FillNtupleDColumn(1, 8, slabHit->GetX());
+      analMan->FillNtupleDColumn(1, 9, slabHit->GetZ());
       analMan->AddNtupleRow(1);
     }
   } else {

@@ -3,7 +3,7 @@
 
 #include "G4VHit.hh"
 #include "vector"
-
+#include "G4Allocator.hh"
 class NonSegmented_PMT_Hit : public G4VHit {
     unsigned int pmtID;
     double photonArrivalTime;
@@ -14,6 +14,12 @@ public:
     double GetPhotonArrivalTime() const;
     void Set(unsigned int pmtid,double pat);
     void Print();
+
+    void* operator new(size_t);
+    void  operator delete(void*);
 };
+
+
+extern G4ThreadLocal G4Allocator<NonSegmented_PMT_Hit>* PMTHitAllocator;
 
 #endif

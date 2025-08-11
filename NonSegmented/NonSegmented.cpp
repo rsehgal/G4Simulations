@@ -14,46 +14,65 @@
 
 #include "NonSegmented_EventAction.h"
 #include "NonSegmented_RunAction.h"
-int main(int argc, char** argv) {
-    G4UIExecutive* ui = nullptr;
-    if (argc == 1) {
-        ui = new G4UIExecutive(argc, argv);
-    }
 
-    G4String outfileName = argv[2];
-    G4RunManager* runManager = new G4RunManager;
+#include "ctime"
+#include "CLHEP/Random/Random.h"
+#include "CLHEP/Random/RanecuEngine.h"
 
-    G4OpticalPhysics *opticalPhysics = new G4OpticalPhysics;
-    G4VModularPhysicsList *physicsList = new FTFP_BERT_HP();
-    physicsList->RegisterPhysics(opticalPhysics);
+int main(int argc, char **argv)
+{
 
-    runManager->SetUserInitialization(new NonSegmented_DetectorConstruction());
-    //runManager->SetUserInitialization(new QGSP_BERT);
-    runManager->SetUserInitialization(physicsList);
-    runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction());
-    runManager->SetUserAction(new NonSegmented_RunAction(outfileName));
-    runManager->SetUserAction(new NonSegmented_EventAction());
-    //runManager->SetUserAction(new NonSegmented_SteppingAction());
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
-    G4VisManager* visManager = new G4VisExecutive();
-    visManager->Initialize();
+  // Set time-based seeds
+  long seeds[2];
+  seeds[0] = time(nullptr);
+  seeds[1] = seeds[0] + 37;  // Just to vary the second one
+  CLHEP::HepRandom::setTheSeeds(seeds);
 
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    if ( ! ui ) {
-    // batch mode
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+  G4UIExecutive *ui = nullptr;
+  G4String outfileName;
+  if (argc == 1) {
+    ui          = new G4UIExecutive(argc, argv);
+    outfileName = "interactive.root";
+  } else {
+    outfileName = argv[2];
   }
-  else {
+  G4RunManager *runManager = new G4RunManager;
+
+  G4OpticalPhysics *opticalPhysics   = new G4OpticalPhysics;
+  G4VModularPhysicsList *physicsList = new FTFP_BERT_HP();
+  #define OPTICAL_PHYSICS
+  #ifdef OPTICAL_PHYSICS
+  physicsList->RegisterPhysics(opticalPhysics);
+  #endif
+
+  runManager->SetUserInitialization(new NonSegmented_DetectorConstruction());
+  // runManager->SetUserInitialization(new QGSP_BERT);
+  runManager->SetUserInitialization(physicsList);
+  runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction());
+  runManager->SetUserAction(new NonSegmented_RunAction(outfileName));
+  runManager->SetUserAction(new NonSegmented_EventAction());
+  // runManager->SetUserAction(new NonSegmented_SteppingAction());
+
+  G4VisManager *visManager = new G4VisExecutive();
+  visManager->Initialize();
+
+  G4UImanager *UImanager = G4UImanager::GetUIpointer();
+  if (!ui) {
+    // batch mode
+    G4String command  = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+  } else {
     // interactive mode
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
   }
 
-    delete visManager;
-    delete runManager;
+  delete visManager;
+  delete runManager;
 
-    return 0;
+  return 0;
 }

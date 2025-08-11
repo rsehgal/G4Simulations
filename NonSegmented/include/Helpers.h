@@ -9,5 +9,6 @@
 #include <vector>
 
 extern double GetTiming(std::vector<double> photoArrivalTimeVec);
-
+extern std::vector<double> biasVec;
+extern std::vector<double> stdVec;
 #endif
