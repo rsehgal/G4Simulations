@@ -30,6 +30,8 @@ add_executable(${PROJECT_NAME} ${SOURCES} NonSegmented.cpp)
 # Link with Geant4 libraries
 target_link_libraries(${PROJECT_NAME} ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
+add_executable(outMLSim outMLSim.cpp)
+target_link_libraries(outMLSim ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 # Set C++ standard
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 

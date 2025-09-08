@@ -32,11 +32,15 @@ int main(int argc, char **argv)
 
   G4UIExecutive *ui = nullptr;
   G4String outfileName;
+  int locX = 0;
+  int locZ = 0;
   if (argc == 1) {
     ui          = new G4UIExecutive(argc, argv);
     outfileName = "interactive.root";
   } else {
     outfileName = argv[2];
+    locX = std::atoi(argv[3]);
+    locZ = std::atoi(argv[4]);
   }
   G4RunManager *runManager = new G4RunManager;
 
@@ -50,7 +54,8 @@ int main(int argc, char **argv)
   runManager->SetUserInitialization(new NonSegmented_DetectorConstruction());
   // runManager->SetUserInitialization(new QGSP_BERT);
   runManager->SetUserInitialization(physicsList);
-  runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction());
+  //runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction());
+  runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction(locX,locZ));
   runManager->SetUserAction(new NonSegmented_RunAction(outfileName));
   runManager->SetUserAction(new NonSegmented_EventAction());
   // runManager->SetUserAction(new NonSegmented_SteppingAction());

@@ -85,7 +85,7 @@ void NonSegmented_DetectorConstruction::AttachOpticalProperties(G4Material *scin
   G4double rIndex[nEntries] = {1.8, 1.8};
 
   // Absorption length (how far photons travel before being absorbed)
-  G4double absorption[nEntries] = {50 * cm, 50 * cm};
+  G4double absorption[nEntries] = {350 * cm, 350 * cm};
 
   // Scintillation emission spectrum (uniform for simplicity)
   G4double scintSpectrum[nEntries] = {1.0, 1.0};
@@ -95,10 +95,12 @@ void NonSegmented_DetectorConstruction::AttachOpticalProperties(G4Material *scin
   mptCrystal->AddProperty("ABSLENGTH", photonEnergy, absorption, nEntries);
   mptCrystal->AddProperty("SCINTILLATIONCOMPONENT1", photonEnergy, scintSpectrum, nEntries);
   mptCrystal->AddProperty("SCINTILLATIONCOMPONENT2", photonEnergy, scintSpectrum, nEntries);
-  mptCrystal->AddConstProperty("SCINTILLATIONYIELD", 100. / MeV);
+  mptCrystal->AddConstProperty("SCINTILLATIONYIELD", 10000. / MeV);
   mptCrystal->AddConstProperty("RESOLUTIONSCALE", 1.0);
-  mptCrystal->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 2.1 * ns);
-  mptCrystal->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 10. * ns);
+  //mptCrystal->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 2.1 * ns);
+  mptCrystal->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 0.9 * ns);
+  //mptCrystal->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 10. * ns);
+  mptCrystal->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 5 * ns);
 
   scintMat->SetMaterialPropertiesTable(mptCrystal);
 }
