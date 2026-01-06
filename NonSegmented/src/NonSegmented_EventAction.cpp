@@ -66,7 +66,7 @@ void NonSegmented_EventAction::EndOfEventAction(const G4Event *event)
       }*/
 	for (unsigned int i = 0; i < vecOfPhotonArrivalTime.size(); i++) {
         analMan->FillNtupleDColumn(1, i , GetTiming(vecOfPhotonArrivalTime[i])+biasVec[i]+G4RandGauss::shoot(0.0, stdVec[i]));
-        analMan->FillNtupleDColumn(1, i+4 , vecOfPhotonArrivalTime[i].size());
+        analMan->FillNtupleDColumn(1, i+4 , G4RandGauss::shoot(vecOfPhotonArrivalTime[i].size(),2));
       }
       // Get Hit point on Slab, currently taking the hit point on top surface
       NonSegmented_Slab_Hit *slabHit = (*slabHitCollection)[0];
