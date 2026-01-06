@@ -22,6 +22,7 @@ void NonSegmented_Slab_Hit::Set(double X, double Z)
 {
   x = X;
   z = Z;
+  eDep = 0.;
 }
 
 double NonSegmented_Slab_Hit::GetX() const
@@ -32,6 +33,14 @@ double NonSegmented_Slab_Hit::GetX() const
 double NonSegmented_Slab_Hit::GetZ() const
 {
   return z;
+}
+
+void NonSegmented_Slab_Hit::Set(double edep){
+  eDep = edep;
+}
+
+double NonSegmented_Slab_Hit::GetEDep()const{
+  return eDep;
 }
 
 void NonSegmented_Slab_Hit::Print()

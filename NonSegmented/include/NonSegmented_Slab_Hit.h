@@ -6,12 +6,14 @@
 
 class NonSegmented_Slab_Hit : public G4VHit {
   double x, z;
-
+  double eDep;
 public:
   NonSegmented_Slab_Hit();
   virtual ~NonSegmented_Slab_Hit();
   void Print();
   void Set(double X, double Z);
+  void Set(double edep);
+  double GetEDep() const;
   double GetX() const;
   double GetZ() const;
 

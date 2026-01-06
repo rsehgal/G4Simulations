@@ -6,7 +6,8 @@
 #include "NonSegmented_HitCollections.h"
 
 class NonSegmented_Slab_SD : public G4VSensitiveDetector {
-    Slab_HitCollection *fSlabHitCollection;    
+    Slab_HitCollection *fSlabHitCollection;   
+    double fEDep; 
 public:
     NonSegmented_Slab_SD(const G4String& name, const G4String &collName);
     virtual ~NonSegmented_Slab_SD();

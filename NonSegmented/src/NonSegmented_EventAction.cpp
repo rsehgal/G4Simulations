@@ -7,7 +7,7 @@
 #include "G4AnalysisManager.hh"
 #include "Helpers.h"
 //#include "G4RandGauss.hh"
-#include "Randomize.hh"""
+#include "Randomize.hh"
 
 NonSegmented_EventAction::NonSegmented_EventAction() {}
 
@@ -48,9 +48,17 @@ void NonSegmented_EventAction::EndOfEventAction(const G4Event *event)
     }
 
     bool detectedByAll = true;
-    for (unsigned int i = 0; i < vecOfPhotonArrivalTime.size(); i++) {
+    /*for (unsigned int i = 0; i < vecOfPhotonArrivalTime.size(); i++) {
       detectedByAll &= vecOfPhotonArrivalTime[i].size() > 0;
-    }
+    }*/
+      detectedByAll &= vecOfPhotonArrivalTime[0].size() > 0;
+      detectedByAll &= vecOfPhotonArrivalTime[2].size() > 0;
+
+#ifndef SCINTBAR
+      detectedByAll &= vecOfPhotonArrivalTime[1].size() > 0;
+      detectedByAll &= vecOfPhotonArrivalTime[3].size() > 0;
+#endif
+
     if (detectedByAll) {
       /*double timing0 = GetTiming(vecOfPhotonArrivalTime[0]);
       for (unsigned int i = 1; i < vecOfPhotonArrivalTime.size(); i++) {

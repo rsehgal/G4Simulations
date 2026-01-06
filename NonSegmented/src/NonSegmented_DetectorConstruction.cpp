@@ -121,7 +121,11 @@ G4VPhysicalVolume *NonSegmented_DetectorConstruction::Construct()
   G4OpticalSurface *opticalSurface = GetOpticalSurface();
 
   // TODO : Create your desired detectors here
+#ifdef SCINTBAR
+  G4Box *scintSlab                  = new G4Box("ScintSlab", 2.5 * cm, 2.5 * cm, 25 * cm);
+#else
   G4Box *scintSlab                  = new G4Box("ScintSlab", 25 * cm, 2.5 * cm, 25 * cm);
+#endif
   G4LogicalVolume *scintSlabLogical = new G4LogicalVolume(scintSlab, scintMat, "LogicalScintSlab");
   new G4LogicalSkinSurface("ReflectiveWrapping", scintSlabLogical, opticalSurface);
 
@@ -131,20 +135,23 @@ G4VPhysicalVolume *NonSegmented_DetectorConstruction::Construct()
   G4VPhysicalVolume *physicalPMT1 = new G4PVPlacement(nullptr, G4ThreeVector(0.,0.,29.000000*cm), pmtLogical, "PhysicalPMT", logicWorld, false, 1, true);
   G4VPhysicalVolume *physicalPMT3 = new G4PVPlacement(nullptr, G4ThreeVector(0.,0.,-29.000000*cm), pmtLogical, "PhysicalPMT", logicWorld, false, 3, true);
 
+#ifndef SCINTBAR
   G4RotationMatrix* rotY90 = new G4RotationMatrix();
 rotY90->rotateY(90.*deg);
 
  G4VPhysicalVolume *physicalPMT2 = new G4PVPlacement(rotY90, G4ThreeVector(29.000000*cm,0,0), pmtLogical, "PhysicalPMT", logicWorld, false, 2, true);
   G4VPhysicalVolume *physicalPMT4 = new G4PVPlacement(rotY90, G4ThreeVector(-29.000000*cm,0,0), pmtLogical, "PhysicalPMT", logicWorld, false, 4, true);
 
-
+#endif
     
   G4OpticalSurface *interfacingSurface = GetInterfacingSurface();
   new G4LogicalBorderSurface("SlabToPMT_Surface1",physicalSlab,physicalPMT1,interfacingSurface);
-  new G4LogicalBorderSurface("SlabToPMT_Surface2",physicalSlab,physicalPMT2,interfacingSurface);
   new G4LogicalBorderSurface("SlabToPMT_Surface3",physicalSlab,physicalPMT3,interfacingSurface);
-  new G4LogicalBorderSurface("SlabToPMT_Surface4",physicalSlab,physicalPMT4,interfacingSurface);
 
+#ifndef SCINTBAR
+  new G4LogicalBorderSurface("SlabToPMT_Surface2",physicalSlab,physicalPMT2,interfacingSurface);
+  new G4LogicalBorderSurface("SlabToPMT_Surface4",physicalSlab,physicalPMT4,interfacingSurface);
+#endif
 
   // Logic to Attach sensitive detector to a logical volume
   //NonSegmented_SensitiveDetector* detector = new NonSegmented_SensitiveDetector("SensitiveDetector");

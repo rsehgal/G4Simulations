@@ -11,6 +11,11 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+option(SCINTBAR "Use Scintillator Bar" OFF)
+if(SCINTBAR)
+add_definitions(-DSCINTBAR)
+endif(SCINTBAR)
+
 find_package(ROOT REQUIRED)
 
 # Include directories
