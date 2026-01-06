@@ -43,7 +43,7 @@ G4LogicalVolume *NonSegmented_DetectorConstruction::GetPMT()
   G4Box *solidPMT           = new G4Box("PMT", 2.5 * cm, 2.5 * cm, 4 * cm);
   G4LogicalVolume *logicPMT = new G4LogicalVolume(solidPMT, pmtMat, "PMT");
 
-  int nEntries = 2;
+  const int nEntries = 2;
   G4double photonEnergy[nEntries] = {1.5 * eV, 3.5 * eV};
 
   // Refractive index
@@ -64,7 +64,7 @@ G4OpticalSurface* NonSegmented_DetectorConstruction::GetInterfacingSurface(){
   crystalToPMTSurface->SetFinish(polished);
 
   // Perfect transmission (no reflectivity)
-  int nEntries = 2;
+  const int nEntries = 2;
   G4MaterialPropertiesTable *mptInterface = new G4MaterialPropertiesTable();
   G4double ephoton[nEntries]                 = {1.5 * eV, 3.5 * eV};
   G4double reflectivity_zero[nEntries]         = {1., 1.};
