@@ -11,6 +11,11 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+option(Na22 "Use Na22 source" OFF)
+if(Na22)
+add_definitions(-DNa22)
+endif(Na22)
+
 option(SCINTBAR "Use Scintillator Bar" OFF)
 if(SCINTBAR)
 add_definitions(-DSCINTBAR)

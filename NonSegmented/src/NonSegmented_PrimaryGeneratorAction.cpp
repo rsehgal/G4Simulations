@@ -4,6 +4,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4SystemOfUnits.hh"
 #include "CLHEP/Random/RandFlat.h"
+#include "G4IonTable.hh"
+#include "G4HadronicParameters.hh"
 
 
 /*NonSegmented_PrimaryGeneratorAction::NonSegmented_PrimaryGeneratorAction() {
@@ -43,7 +45,15 @@ void NonSegmented_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     
     //TODO :  Logic to change the particle position for each event
 
-  double ypos = 500;
+  double ypos = 35;
+//#define Na22
+#ifdef Na22
+//G4HadronicParameters::Instance()->SetTimeThresholdForRadioactiveDecay(1.0e+60 * CLHEP::year);
+G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(11, 22, 0);
+fParticleGun->SetParticleDefinition(ion);
+fParticleGun->SetParticleEnergy(0*eV);
+fParticleGun->SetParticlePosition(G4ThreeVector(0.,ypos,0.));
+#else
 #define RANDOM_POS
 #ifdef RANDOM_POS
   //double randX1 = CLHEP::RandFlat::shoot(-250.,250.);
@@ -55,6 +65,7 @@ void NonSegmented_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   //double randZ1 = CLHEP::RandFlat::shoot(70.,130.);
 
   fParticleGun->SetParticlePosition(G4ThreeVector(randX1,ypos,randZ1));
+#endif
 #endif
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }

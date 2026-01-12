@@ -109,6 +109,7 @@ G4VPhysicalVolume *NonSegmented_DetectorConstruction::Construct()
 {
   G4NistManager *nist  = G4NistManager::Instance();
   G4Material *worldMat = nist->FindOrBuildMaterial("G4_AIR");
+//G4Material *worldMat = nist->FindOrBuildMaterial("G4_Galactic");
 
   // Modify the world volume dimension as required
   G4Box *solidWorld            = new G4Box("World", 1.5 * m, 1.5 * m, 1.5 * m);

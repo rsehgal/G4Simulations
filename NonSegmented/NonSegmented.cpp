@@ -13,11 +13,14 @@
 #include "G4OpticalPhysics.hh"
 
 #include "NonSegmented_EventAction.h"
+#include "NonSegmented_TrackingAction.h"
 #include "NonSegmented_RunAction.h"
 
 #include "ctime"
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Random/RanecuEngine.h"
+#include  "G4RadioactiveDecayPhysics.hh"
+#include "G4HadronicParameters.hh"
 
 int main(int argc, char **argv)
 {
@@ -46,6 +49,7 @@ int main(int argc, char **argv)
 
   G4OpticalPhysics *opticalPhysics   = new G4OpticalPhysics;
   G4VModularPhysicsList *physicsList = new FTFP_BERT_HP();
+//physicsList->RegisterPhysics(new G4RadioactiveDecayPhysics());
   #define OPTICAL_PHYSICS
   #ifdef OPTICAL_PHYSICS
   physicsList->RegisterPhysics(opticalPhysics);
@@ -58,7 +62,10 @@ int main(int argc, char **argv)
   runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction(locX,locZ));
   runManager->SetUserAction(new NonSegmented_RunAction(outfileName));
   runManager->SetUserAction(new NonSegmented_EventAction());
+  //runManager->SetUserAction(new NonSegmented_TrackingAction());
   // runManager->SetUserAction(new NonSegmented_SteppingAction());
+    G4HadronicParameters::Instance()->SetTimeThresholdForRadioactiveDecay(1.0e+60 * CLHEP::year);
+
 
   G4VisManager *visManager = new G4VisExecutive();
   visManager->Initialize();
