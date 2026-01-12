@@ -26,11 +26,11 @@ NonSegmented_PrimaryGeneratorAction::NonSegmented_PrimaryGeneratorAction(int loc
     fParticleGun = new G4ParticleGun(n_particle);
 
     //Default we have setup geantino particles
-    G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
+    /*G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
     fParticleGun->SetParticleDefinition(particle);
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
     fParticleGun->SetParticleEnergy(1.0 * MeV);
-    
+    */
     
     // TODO : Add your desired particles
 }
@@ -53,6 +53,7 @@ G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(11, 22, 0);
 fParticleGun->SetParticleDefinition(ion);
 fParticleGun->SetParticleEnergy(0*eV);
 fParticleGun->SetParticlePosition(G4ThreeVector(0.,ypos,0.));
+fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., -1., 0.));
 #else
 #define RANDOM_POS
 #ifdef RANDOM_POS

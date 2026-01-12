@@ -14,6 +14,7 @@
 
 #include "NonSegmented_EventAction.h"
 #include "NonSegmented_TrackingAction.h"
+#include "NonSegmented_StackingAction.h"
 #include "NonSegmented_RunAction.h"
 
 #include "ctime"
@@ -25,6 +26,7 @@
 int main(int argc, char **argv)
 {
 
+    G4HadronicParameters::Instance()->SetTimeThresholdForRadioactiveDecay(1.0e+60 * CLHEP::year);
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
   // Set time-based seeds
@@ -62,9 +64,9 @@ int main(int argc, char **argv)
   runManager->SetUserAction(new NonSegmented_PrimaryGeneratorAction(locX,locZ));
   runManager->SetUserAction(new NonSegmented_RunAction(outfileName));
   runManager->SetUserAction(new NonSegmented_EventAction());
-  //runManager->SetUserAction(new NonSegmented_TrackingAction());
+  runManager->SetUserAction(new NonSegmented_TrackingAction());
+  runManager->SetUserAction(new NonSegmented_StackingAction());
   // runManager->SetUserAction(new NonSegmented_SteppingAction());
-    G4HadronicParameters::Instance()->SetTimeThresholdForRadioactiveDecay(1.0e+60 * CLHEP::year);
 
 
   G4VisManager *visManager = new G4VisExecutive();

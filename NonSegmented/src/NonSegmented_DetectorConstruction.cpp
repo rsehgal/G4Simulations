@@ -3,7 +3,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4NistManager.hh"
-#include "NonSegmented_SensitiveDetector.h"
 #include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4MaterialPropertiesTable.hh"

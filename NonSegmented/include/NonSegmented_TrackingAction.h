@@ -8,7 +8,7 @@ class NonSegmented_TrackingAction : public G4UserTrackingAction {
 public:
     NonSegmented_TrackingAction();
     virtual ~NonSegmented_TrackingAction();
-    virtual void PreUserTrackingAction(const G4Track *track);
+    virtual void PreUserTrackingAction( G4Track *track);
     virtual void PostUserTrackingAction(const G4Track *track);
 };
 

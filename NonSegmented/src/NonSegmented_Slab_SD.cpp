@@ -6,7 +6,7 @@
 #include "G4StepPoint.hh"
 #include "NonSegmented_Slab_Hit.h"
 #include "G4AnalysisManager.hh"
-
+#include "Randomize.hh"
 NonSegmented_Slab_SD::NonSegmented_Slab_SD(const G4String &name, const G4String &collName) : G4VSensitiveDetector(name)
 {
   collectionName.insert(collName);
@@ -32,7 +32,8 @@ G4bool NonSegmented_Slab_SD::ProcessHits(G4Step *step, G4TouchableHistory *)
   fEDep += step->GetTotalEnergyDeposit();
   NonSegmented_Slab_Hit *hit = new NonSegmented_Slab_Hit;
 
-  if (track->GetTrackID() == 1) {
+//  if (track->GetTrackID() == 1) {
+if(track->GetParticleDefinition()->GetParticleName()=="gamma"){
     if (postStepPoint->GetStepStatus() == fGeomBoundary) {
       // std::cout << postStepPoint->GetPosition() << std::endl;
       hit->Set(postStepPoint->GetPosition().x(), postStepPoint->GetPosition().z());
@@ -47,7 +48,11 @@ void NonSegmented_Slab_SD::EndOfEvent(G4HCofThisEvent *hce)
 {
 
    G4AnalysisManager *analMan = G4AnalysisManager::Instance();
-   analMan->FillNtupleDColumn(1,10,fEDep);
+   double ekev = fEDep*1000;
+   double sigma = -17.8048+3.35647*std::sqrt(ekev)+0.210626*ekev;
+   double smearedEnergy = G4RandGauss::shoot(ekev,sigma); //fEDep
+   analMan->FillNtupleDColumn(1,10,ekev);
+   analMan->FillNtupleDColumn(1,11,smearedEnergy);
   /*unsigned int entries = fSlabHitCollection->entries();
 
   for (unsigned int i = 0; i < entries; i++) {

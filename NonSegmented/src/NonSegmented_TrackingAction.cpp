@@ -4,18 +4,24 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VProcess.hh"
 
-NonSegmented_TrackingAction::NonSegmented_TrackingAction()  {
-}
+NonSegmented_TrackingAction::NonSegmented_TrackingAction() {}
 
 NonSegmented_TrackingAction::~NonSegmented_TrackingAction() {}
 
-void NonSegmented_TrackingAction::PreUserTrackingAction(const G4Track *track){
-    
-//std::cout <<"Tracking Action begin....." << std::endl;
-if(track->GetParticleDefinition()->GetParticleName()=="gamma") 
-std::cout << "VolumeName : " << track->GetVolume()->GetName() << " :: ParticleName : " << track->GetParticleDefinition()->GetParticleName() << " :: Energy : " << track->GetKineticEnergy() << " :: CreatorProcess : " << track->GetCreatorProcess()->GetProcessName() <<  std::endl;
-}
-void NonSegmented_TrackingAction::PostUserTrackingAction(const G4Track *track){
-//std::cout <<"Tracking Action ends....." << std::endl;
-}
+void NonSegmented_TrackingAction::PreUserTrackingAction( G4Track *track)
+{
 
+  // std::cout <<"Tracking Action begin....." << std::endl;
+  //if (track->GetParticleDefinition()->GetParticleName() == "gamma") {
+if(track->GetParentID()==1 && track->GetGlobalTime() > 0){
+    track->SetGlobalTime(0.);
+    /*std::cout << "VolumeName : " << track->GetVolume()->GetName()
+              << " :: ParticleName : " << track->GetParticleDefinition()->GetParticleName()
+              << " :: Energy : " << track->GetKineticEnergy()
+              << " :: CreatorProcess : " << track->GetCreatorProcess()->GetProcessName() << std::endl;*/
+  }
+}
+void NonSegmented_TrackingAction::PostUserTrackingAction(const G4Track *track)
+{
+  // std::cout <<"Tracking Action ends....." << std::endl;
+}

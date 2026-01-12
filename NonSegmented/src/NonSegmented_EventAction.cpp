@@ -35,8 +35,9 @@ void NonSegmented_EventAction::EndOfEventAction(const G4Event *event)
   PMT_HitCollection *pmtHitCollection   = static_cast<PMT_HitCollection *>(hce->GetHC(hcID_PMT));
   Slab_HitCollection *slabHitCollection = static_cast<Slab_HitCollection *>(hce->GetHC(hcID_Slab));
 
+  //std::cout << "PMT Collection size : " << pmtHitCollection->entries() << " :: SlabHitCollection : " << slabHitCollection->entries() << std::endl;
   if (pmtHitCollection->entries() > 0 && slabHitCollection->entries() > 0) {
-    // std::cout << "Genuine hit collection found...." << std::endl;
+     //std::cout << "Genuine hit collection found...." << std::endl;
 
     std::vector<std::vector<double>> vecOfPhotonArrivalTime(4);
     unsigned int entries = pmtHitCollection->entries();
@@ -66,7 +67,8 @@ void NonSegmented_EventAction::EndOfEventAction(const G4Event *event)
       }*/
 	for (unsigned int i = 0; i < vecOfPhotonArrivalTime.size(); i++) {
         analMan->FillNtupleDColumn(1, i , GetTiming(vecOfPhotonArrivalTime[i])+biasVec[i]+G4RandGauss::shoot(0.0, stdVec[i]));
-        analMan->FillNtupleDColumn(1, i+4 , G4RandGauss::shoot(vecOfPhotonArrivalTime[i].size(),2));
+        //analMan->FillNtupleDColumn(1, i+4 , G4RandGauss::shoot(vecOfPhotonArrivalTime[i].size(),2));
+        analMan->FillNtupleDColumn(1, i+4 , vecOfPhotonArrivalTime[i].size());
       }
       // Get Hit point on Slab, currently taking the hit point on top surface
       NonSegmented_Slab_Hit *slabHit = (*slabHitCollection)[0];
